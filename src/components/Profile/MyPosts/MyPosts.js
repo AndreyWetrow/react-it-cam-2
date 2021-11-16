@@ -4,7 +4,7 @@ import Post from "./Post/Post";
 import {
   addPostActionCreator,
   updateNewPostTextActionCreator,
-} from "../../../redux/state";
+} from "../../../redux/profileReducer";
 
 const MyPosts = ({ profilePage, newPostText, dispatch }) => {
   // console.log(profilePage, newPostText, addPost, updateNewPostText);

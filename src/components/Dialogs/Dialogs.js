@@ -4,9 +4,9 @@ import classes from "./Dialogs.module.scss";
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
 import {
-  addMessageActionCreator,
-  updateMessageTextActionCreator,
-} from "../../redux/state";
+  sendMessageCreator,
+  updateNewMessageBodyCreator,
+} from "../../redux/dialogsReducer";
 
 // const DialogsItem = (props) => {
 //   const path = `/dialogs/${props.id}`;
@@ -37,17 +37,13 @@ import {
 // ];
 
 const Dialogs = ({ state, dispatch }) => {
-  let newMessageRef = React.createRef();
-  const addMessage = () => {
-    // let text = newMessageRef.current.value;
-
-    dispatch(addMessageActionCreator());
-    // console.log(text);
+  const onSendMessageClick = () => {
+    dispatch(sendMessageCreator());
   };
 
-  const onMessageChange = () => {
-    let text = newMessageRef.current.value;
-    let action = updateMessageTextActionCreator(text);
+  const onNewMessageChange = (e) => {
+    let body = e.target.value;
+    let action = updateNewMessageBodyCreator(body);
     dispatch(action);
   };
 
@@ -74,15 +70,11 @@ const Dialogs = ({ state, dispatch }) => {
       </div>
       <div className={classes.addMessage}>
         <textarea
-          ref={newMessageRef}
-          name=""
-          id=""
-          cols="20"
-          rows="5"
-          onChange={onMessageChange}
-          value={state.newMessageText}
+          placeholder={"Enter your message"}
+          onChange={onNewMessageChange}
+          value={state.newMessageBody}
         />
-        <button onClick={addMessage}>Add message</button>
+        <button onClick={onSendMessageClick}>Send</button>
       </div>
     </>
   );
