@@ -4,39 +4,39 @@ import Navbar from "./components/Navbar/Navbar";
 import Profile from "./components/Profile/Profile";
 import Dialogs from "./components/Dialogs/Dialogs";
 import classes from "./App.module.scss";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
-const App = (props) => {
+// const App = ({ posts, messages, dialogs }) => {
+// const App = ({ state, addPost, updateNewPostText }) => {
+const App = ({ state, dispatch }) => {
   return (
-    <BrowserRouter>
-      <div className={classes.appWrapper}>
-        <Header />
-        <Navbar />
+    <div className={classes.appWrapper}>
+      <Header />
+      <Navbar state={state.sidebar} />
 
-        <div className={classes.appWrapperContent}>
-          <Routes>
-            <Route
-              path={"/profile"}
-              element={<Profile posts={props.posts} />}
-            />
-            <Route
-              path={"/dialogs"}
-              element={
-                <Dialogs dialogs={props.dialogs} messages={props.messages} />
-              }
-            />
-            <Route
-              path="*"
-              element={
-                <main style={{ padding: "1rem" }}>
-                  <p>There's nothing here!</p>
-                </main>
-              }
-            />
-          </Routes>
-        </div>
+      <div className={classes.appWrapperContent}>
+        <Routes>
+          <Route
+            path={"/profile"}
+            element={
+              <Profile profilePage={state.profilePage} dispatch={dispatch} />
+            }
+          />
+          <Route
+            path={"/dialogs"}
+            element={<Dialogs state={state.dialogsPage} dispatch={dispatch} />}
+          />
+          <Route
+            path="*"
+            element={
+              <main style={{ padding: "1rem" }}>
+                <p>There's nothing here!</p>
+              </main>
+            }
+          />
+        </Routes>
       </div>
-    </BrowserRouter>
+    </div>
   );
 };
 

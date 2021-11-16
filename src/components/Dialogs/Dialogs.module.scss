@@ -10,12 +10,52 @@
   }
   .dialog {
     color: #fff;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+  }
+}
+.messagesContainer {
+  display: flex;
+  //justify-content: center;
+  margin-left: 30px;
+}
+.messages {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: 50%;
+
+  .message {
+    margin-bottom: 10px;
+    color: #fff;
+    background: olive;
+    padding: 3px;
+    border-radius: 5px;
+
+    &:nth-child(odd) {
+      margin-left: auto;
+    }
+    &:nth-child(even) {
+      margin-right: auto;
+    }
   }
 }
 
-.messages {
-  padding: 10px;
-  .message {
-    color: #fff;
+.addMessage {
+  textarea {
+    display: block;
+    margin-bottom: 5px;
+  }
+  button {
+    cursor: pointer;
   }
 }

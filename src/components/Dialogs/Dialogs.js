@@ -3,6 +3,10 @@ import classes from "./Dialogs.module.scss";
 
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
+import {
+  addMessageActionCreator,
+  updateMessageTextActionCreator,
+} from "../../redux/state";
 
 // const DialogsItem = (props) => {
 //   const path = `/dialogs/${props.id}`;
@@ -32,20 +36,55 @@ import Message from "./Message/Message";
 //   { id: 5, message: "I love layout" },
 // ];
 
-const Dialogs = ({ dialogs, messages }) => {
-  let dialogsElements = dialogs.map((item) => (
-    <DialogItem name={item.name} id={item.id} key={item.id} />
+const Dialogs = ({ state, dispatch }) => {
+  let newMessageRef = React.createRef();
+  const addMessage = () => {
+    // let text = newMessageRef.current.value;
+
+    dispatch(addMessageActionCreator());
+    // console.log(text);
+  };
+
+  const onMessageChange = () => {
+    let text = newMessageRef.current.value;
+    let action = updateMessageTextActionCreator(text);
+    dispatch(action);
+  };
+
+  let dialogsElements = state.dialogs.map((item) => (
+    <DialogItem
+      name={item.name}
+      id={item.id}
+      key={item.id}
+      avatar={item.avatar}
+    />
   ));
 
-  let messagesElements = messages.map((item) => (
+  let messagesElements = state.messages.map((item) => (
     <Message message={item.message} id={item.id} key={item.id} />
   ));
 
   return (
-    <div className={classes.dialogs}>
-      <div className={classes.dialogsItems}>{dialogsElements}</div>
-      <div className={classes.messages}>{messagesElements}</div>
-    </div>
+    <>
+      <div className={classes.dialogs}>
+        <div className={classes.dialogsItems}>{dialogsElements}</div>
+        <div className={classes.messagesContainer}>
+          <div className={classes.messages}>{messagesElements}</div>
+        </div>
+      </div>
+      <div className={classes.addMessage}>
+        <textarea
+          ref={newMessageRef}
+          name=""
+          id=""
+          cols="20"
+          rows="5"
+          onChange={onMessageChange}
+          value={state.newMessageText}
+        />
+        <button onClick={addMessage}>Add message</button>
+      </div>
+    </>
   );
 };
 
