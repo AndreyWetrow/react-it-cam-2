@@ -2,29 +2,26 @@ import "./App.module.scss";
 import Header from "./components/Header/Header";
 import Navbar from "./components/Navbar/Navbar";
 import Profile from "./components/Profile/Profile";
-import Dialogs from "./components/Dialogs/Dialogs";
 import classes from "./App.module.scss";
 import { Route, Routes } from "react-router-dom";
+import DialogsContainer from "./components/Dialogs/DialogsContainer";
 
 // const App = ({ posts, messages, dialogs }) => {
 // const App = ({ state, addPost, updateNewPostText }) => {
-const App = ({ state, dispatch }) => {
+// const App = ({ state, dispatch }) => {
+const App = (props) => {
   return (
     <div className={classes.appWrapper}>
       <Header />
-      <Navbar state={state.sidebar} />
+      <Navbar state={props.store.getState().sidebar} />
 
       <div className={classes.appWrapperContent}>
         <Routes>
-          <Route
-            path={"/profile"}
-            element={
-              <Profile profilePage={state.profilePage} dispatch={dispatch} />
-            }
-          />
+          <Route path={"/profile"} element={<Profile store={props.store} />} />
           <Route
             path={"/dialogs"}
-            element={<Dialogs state={state.dialogsPage} dispatch={dispatch} />}
+            // element={<Dialogs state={state.dialogsPage} dispatch={dispatch} />}
+            element={<DialogsContainer store={props.store} />}
           />
           <Route
             path="*"

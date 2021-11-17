@@ -1,50 +1,18 @@
 import React from "react";
 import classes from "./Dialogs.module.scss";
-
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
-import {
-  sendMessageCreator,
-  updateNewMessageBodyCreator,
-} from "../../redux/dialogsReducer";
 
-// const DialogsItem = (props) => {
-//   const path = `/dialogs/${props.id}`;
-//   return (
-//     <div className={classes.dialog + " " + classes.active}>
-//       <NavLink to={path}>{props.name}</NavLink>
-//     </div>
-//   );
-// };
-//
-// const Message = (props) => {
-//   return <div className={classes.dialog}>{props.message}</div>;
-// };
+const Dialogs = (props) => {
+  let state = props.dialogsPage;
 
-// let dialogsData = [
-//   { id: 1, name: "Anna" },
-//   { id: 2, name: "Andrey" },
-//   { id: 3, name: "Sanja" },
-//   { id: 4, name: "Vitaly" },
-//   { id: 5, name: "Ivan" },
-// ];
-// let messagesData = [
-//   { id: 1, message: "Hello" },
-//   { id: 2, message: "Hi, how you health" },
-//   { id: 3, message: "Hello, how are you" },
-//   { id: 4, message: "I`m crazy" },
-//   { id: 5, message: "I love layout" },
-// ];
-
-const Dialogs = ({ state, dispatch }) => {
   const onSendMessageClick = () => {
-    dispatch(sendMessageCreator());
+    props.sendMessage();
   };
 
   const onNewMessageChange = (e) => {
     let body = e.target.value;
-    let action = updateNewMessageBodyCreator(body);
-    dispatch(action);
+    props.updateNewMessageBody(body);
   };
 
   let dialogsElements = state.dialogs.map((item) => (

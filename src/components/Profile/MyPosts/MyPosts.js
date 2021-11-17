@@ -1,22 +1,19 @@
 import React from "react";
 import classes from "./MyPosts.module.scss";
 import Post from "./Post/Post";
-import {
-  addPostActionCreator,
-  updateNewPostTextActionCreator,
-} from "../../../redux/profileReducer";
 
-const MyPosts = ({ profilePage, newPostText, dispatch }) => {
+const MyPosts = (props) => {
   // console.log(profilePage, newPostText, addPost, updateNewPostText);
 
-  let postsElements = profilePage.map((item) => (
+  let postsElements = props.posts.map((item) => (
     <Post message={item.message} likesCount={item.likesCount} key={item.id} />
   ));
 
   let newPostRef = React.createRef();
 
-  const addPostFunc = () => {
-    dispatch(addPostActionCreator());
+  const onAddPost = () => {
+    props.addPost();
+    // dispatch(addPostActionCreator());
   };
   // const addPostMessageText = () => {
   //   let text = newPostRef.current.value;
@@ -24,8 +21,11 @@ const MyPosts = ({ profilePage, newPostText, dispatch }) => {
   // };
   const onPostChange = () => {
     let text = newPostRef.current.value;
-    let action = updateNewPostTextActionCreator(text);
-    dispatch(action);
+
+    props.updateNewPostText(text);
+
+    // let action = updateNewPostTextActionCreator(text);
+    // dispatch(action);
     // updateNewPostText(text);
   };
 
@@ -34,25 +34,18 @@ const MyPosts = ({ profilePage, newPostText, dispatch }) => {
       <h3>My posts</h3>
       <div>
         <div>
-          {/*<textarea*/}
-          {/*  onInput={addPostMessageText}*/}
-          {/*  ref={newPostRef}*/}
-          {/*  cols="30"*/}
-          {/*  rows="5"*/}
-          {/*  value={"it-kamasutra"}*/}
-          {/*/> */}
           <textarea
             onChange={onPostChange}
             ref={newPostRef}
             cols="30"
             rows="5"
-            value={newPostText}
+            value={props.newPostText}
           />
         </div>
         <div>
           <button
             onClick={() => {
-              addPostFunc();
+              onAddPost();
             }}
           >
             Add post
