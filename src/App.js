@@ -5,6 +5,7 @@ import Profile from "./components/Profile/Profile";
 import classes from "./App.module.scss";
 import { Route, Routes } from "react-router-dom";
 import DialogsContainer from "./components/Dialogs/DialogsContainer";
+import StoreContext from "./StoreContext";
 
 // const App = ({ posts, messages, dialogs }) => {
 // const App = ({ state, addPost, updateNewPostText }) => {
@@ -13,15 +14,19 @@ const App = (props) => {
   return (
     <div className={classes.appWrapper}>
       <Header />
-      <Navbar state={props.store.getState().sidebar} />
+      <StoreContext.Consumer>
+        {(store) => {
+          return <Navbar state={store.getState().sidebar} />;
+        }}
+      </StoreContext.Consumer>
 
       <div className={classes.appWrapperContent}>
         <Routes>
-          <Route path={"/profile"} element={<Profile store={props.store} />} />
+          <Route path={"/profile"} element={<Profile />} />
           <Route
             path={"/dialogs"}
             // element={<Dialogs state={state.dialogsPage} dispatch={dispatch} />}
-            element={<DialogsContainer store={props.store} />}
+            element={<DialogsContainer />}
           />
           <Route
             path="*"

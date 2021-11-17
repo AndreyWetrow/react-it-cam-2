@@ -6,6 +6,8 @@ import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import store from "./redux/redux-store";
+import { Provider } from "./StoreContext";
+
 // import store from "./redux/store";
 // import store from "./redux/store";
 
@@ -24,9 +26,14 @@ import store from "./redux/redux-store";
 const rerenderEntireTree = (store) => {
   ReactDOM.render(
     <BrowserRouter>
-      {/*<App store={state} dispatch={store.dispatch.bind(store)} />*/}
-      <App store={store} />
+      {/*<StoreContext.Provider value={store}>*/}
+      {/*  <App />*/}
+      {/*</StoreContext.Provider> */}
+      <Provider store={store}>
+        <App />
+      </Provider>
     </BrowserRouter>,
+
     document.getElementById("root")
   );
 };
