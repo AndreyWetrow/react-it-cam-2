@@ -1,33 +1,23 @@
 import "./App.module.scss";
 import Header from "./components/Header/Header";
-import Navbar from "./components/Navbar/Navbar";
 import Profile from "./components/Profile/Profile";
 import classes from "./App.module.scss";
 import { Route, Routes } from "react-router-dom";
 import DialogsContainer from "./components/Dialogs/DialogsContainer";
-import StoreContext from "./StoreContext";
+import NavbarContainer from "./components/Navbar/NavbarContainer";
+import UsersContainer from "./components/Users/UsersContainer";
 
-// const App = ({ posts, messages, dialogs }) => {
-// const App = ({ state, addPost, updateNewPostText }) => {
-// const App = ({ state, dispatch }) => {
 const App = (props) => {
   return (
     <div className={classes.appWrapper}>
       <Header />
-      <StoreContext.Consumer>
-        {(store) => {
-          return <Navbar state={store.getState().sidebar} />;
-        }}
-      </StoreContext.Consumer>
+      <NavbarContainer />
 
       <div className={classes.appWrapperContent}>
         <Routes>
           <Route path={"/profile"} element={<Profile />} />
-          <Route
-            path={"/dialogs"}
-            // element={<Dialogs state={state.dialogsPage} dispatch={dispatch} />}
-            element={<DialogsContainer />}
-          />
+          <Route path={"/dialogs"} element={<DialogsContainer />} />
+          <Route path={"/users"} element={<UsersContainer />} />
           <Route
             path="*"
             element={

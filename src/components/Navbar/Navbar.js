@@ -3,7 +3,7 @@ import classes from "./Navbar.module.scss";
 import { NavLink } from "react-router-dom";
 import Friends from "./Friends/Friends";
 
-const Navbar = ({ state }) => {
+const Navbar = (props) => {
   const activeLink = () => {
     return ({ isActive }) => (isActive ? `${classes.active}` : "");
   };
@@ -22,6 +22,11 @@ const Navbar = ({ state }) => {
             </NavLink>
           </li>
           <li className={classes.item}>
+            <NavLink className={activeLink()} to="/users">
+              Users
+            </NavLink>
+          </li>
+          <li className={classes.item}>
             <NavLink to="/news">News</NavLink>
           </li>
           <li className={classes.item}>
@@ -31,7 +36,7 @@ const Navbar = ({ state }) => {
             <NavLink to="/settings">Settings</NavLink>
           </li>
         </ul>
-        <Friends state={state} />
+        <Friends state={props.sidebar} />
       </nav>
     </div>
   );

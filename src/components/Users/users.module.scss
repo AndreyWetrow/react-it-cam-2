@@ -1,0 +1,23 @@
+.usersPhoto {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.usersButton {
+  cursor: pointer;
+}
+
+.usersWebsite {
+  display: inline-block;
+  background-color: lightblue;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 20px;
+  color: blue;
+}
+
+.selectedPage {
+  font-weight: bold;
+}

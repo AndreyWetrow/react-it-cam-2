@@ -6,46 +6,29 @@ import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import store from "./redux/redux-store";
-import { Provider } from "./StoreContext";
+import { Provider } from "react-redux";
 
-// import store from "./redux/store";
-// import store from "./redux/store";
+ReactDOM.render(
+  <BrowserRouter>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </BrowserRouter>,
 
-// const rerenderEntireTree = (state) => {
-//   ReactDOM.render(
-//     <BrowserRouter>
-//       <App
-//         state={state}
-//         addPost={addPost}
-//         updateNewPostText={updateNewPostText}
-//       />
-//     </BrowserRouter>,
-//     document.getElementById("root")
-//   );
-// };
-const rerenderEntireTree = (store) => {
-  ReactDOM.render(
-    <BrowserRouter>
-      {/*<StoreContext.Provider value={store}>*/}
-      {/*  <App />*/}
-      {/*</StoreContext.Provider> */}
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </BrowserRouter>,
-
-    document.getElementById("root")
-  );
-};
+  document.getElementById("root")
+);
 
 // rerenderEntireTree(store.getState());
-rerenderEntireTree(store);
+// rerenderEntireTree();
 
 // store.subscribe(rerenderEntireTree);
-store.subscribe(() => {
-  // rerenderEntireTree(store.getState());
-  rerenderEntireTree(store);
-});
+// store.subscribe(() => {47800,.Э,юЭ,юббю.юб
+//
+//
+//
+//
+//   rerenderEntireTree();опав
+// });
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

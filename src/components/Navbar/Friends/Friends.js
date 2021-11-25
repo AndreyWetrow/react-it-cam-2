@@ -1,8 +1,8 @@
 import React from "react";
 import classes from "./Friends.module.scss";
 
-const Friends = ({ state }) => {
-  const friendsElements = state.friends.map((item) => {
+const Friends = (props) => {
+  const friendsElements = props.state.map((item) => {
     return (
       <div className={classes.friendsItem} key={item.id}>
         <span className={classes.friendsAvatar} />
