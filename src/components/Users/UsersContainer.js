@@ -2,15 +2,18 @@ import { connect } from "react-redux";
 import React from "react";
 import axios from "axios";
 import userPhoto from "../../assets/images/user.jpg";
+
 import Users from "./Users";
 import {
-  followAC,
-  setCurrentPageAC,
-  setUsersAC,
-  setUsersOnPagesAC,
-  setUsersTotalCountAC,
-  unfollowAC,
+  follow,
+  setCurrentPage,
+  setUsers,
+  setUsersOnPages,
+  setTotalUsersCount,
+  toggleIsFetching,
+  unfollow,
 } from "../../redux/usersReducer";
+import Preloader from "../common/preloader/Preloader";
 
 class UsersContainer extends React.Component {
   onGetArrayPages = (response) => {
@@ -59,10 +62,12 @@ class UsersContainer extends React.Component {
   // }
   componentDidMount() {
     if (this.props.users.length === 0) {
+      this.props.toggleIsFetching(true);
       axios
         // .get("https://swapi.dev/api/planets")
         .get("https://jsonplaceholder.typicode.com/users")
         .then((response) => {
+          this.props.toggleIsFetching(false);
           // axios.get("https://swapi.dev/api/people").then((response) => {
 
           this.props.setUsers(response.data);
@@ -97,16 +102,19 @@ class UsersContainer extends React.Component {
 
   render() {
     return (
-      <Users
-        totalUsersCount={this.props.totalUsersCount}
-        pageSize={this.props.pageSize}
-        currentPage={this.props.currentPage}
-        onPageChanged={this.onPageChanged}
-        users={this.props.users}
-        userPhoto={userPhoto}
-        follow={this.props.follow}
-        unfollow={this.props.unfollow}
-      />
+      <>
+        {this.props.isFetching ? <Preloader /> : null}
+        <Users
+          totalUsersCount={this.props.totalUsersCount}
+          pageSize={this.props.pageSize}
+          currentPage={this.props.currentPage}
+          onPageChanged={this.onPageChanged}
+          users={this.props.users}
+          userPhoto={userPhoto}
+          follow={this.props.follow}
+          unfollow={this.props.unfollow}
+        />
+      </>
     );
   }
 }
@@ -118,29 +126,41 @@ const mapStateToProps = (state) => {
     pageSize: state.usersPage.pageSize,
     totalUsersCount: state.usersPage.totalUsersCount,
     currentPage: state.usersPage.currentPage,
+    isFetching: state.usersPage.isFetching,
   };
 };
-const mapDispatchToProps = (dispatch) => {
-  return {
-    follow: (userId) => {
-      dispatch(followAC(userId));
-    },
-    unfollow: (userId) => {
-      dispatch(unfollowAC(userId));
-    },
-    setUsers: (users) => {
-      dispatch(setUsersAC(users));
-    },
-    setCurrentPage: (pageNumber) => {
-      dispatch(setCurrentPageAC(pageNumber));
-    },
-    setTotalUsersCount: (totalCount) => {
-      dispatch(setUsersTotalCountAC(totalCount));
-    },
-    setUsersOnPages: (usersOnPages) => {
-      dispatch(setUsersOnPagesAC(usersOnPages));
-    },
-  };
-};
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     follow: (userId) => {
+//       dispatch(followAC(userId));
+//     },
+//     unfollow: (userId) => {
+//       dispatch(unfollowAC(userId));
+//     },
+//     setUsers: (users) => {
+//       dispatch(setUsersAC(users));
+//     },
+//     setCurrentPage: (pageNumber) => {
+//       dispatch(setCurrentPageAC(pageNumber));
+//     },
+//     setTotalUsersCount: (totalCount) => {
+//       dispatch(setUsersTotalCountAC(totalCount));
+//     },
+//     setUsersOnPages: (usersOnPages) => {
+//       dispatch(setUsersOnPagesAC(usersOnPages));
+//     },
+//     toggleIsFetching: (isFetching) => {
+//       dispatch(toggleIsFetchingAC(isFetching));
+//     },
+//   };
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UsersContainer);
+export default connect(mapStateToProps, {
+  follow,
+  unfollow,
+  setUsers,
+  setCurrentPage,
+  setTotalUsersCount,
+  setUsersOnPages,
+  toggleIsFetching,
+})(UsersContainer);

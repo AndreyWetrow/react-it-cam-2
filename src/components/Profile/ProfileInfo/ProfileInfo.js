@@ -1,7 +1,11 @@
 import React from "react";
 import classes from "./ProfileInfo.module.scss";
+import Preloader from "../../common/preloader/Preloader";
 
-const ProfileInfo = () => {
+const ProfileInfo = (props) => {
+  if (!props.profile) {
+    return <Preloader />;
+  }
   return (
     <>
       <div className={classes.content__bg}>
@@ -10,7 +14,10 @@ const ProfileInfo = () => {
           alt=""
         />
       </div>
-      <div className={classes.descriptionBlock}> ava + desk</div>
+      <div>{props.profile.website}</div>
+      <div>{props.profile.phone}</div>
+      <div className={classes.descriptionBlock}> {props.profile.name}</div>
+      <div className={classes.descriptionBlock}> {props.profile.username}</div>
     </>
   );
 };
