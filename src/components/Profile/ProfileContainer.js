@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import Profile from "./Profile";
-import axios from "axios";
 import { connect } from "react-redux";
-import { setUserProfile } from "../../redux/profileReducer";
-import { withRouter } from "react-router-dom";
-// import { withRouter  } from "react-router-dom";
+import { getUserProfile } from "../../redux/profileReducer";
+import { Redirect, withRouter } from "react-router-dom";
 
 class ProfileContainer extends Component {
   componentDidMount() {
@@ -12,15 +10,21 @@ class ProfileContainer extends Component {
     if (!userId) {
       userId = 2;
     }
-
-    axios
-      .get("https://jsonplaceholder.typicode.com/users/" + userId)
-      .then((response) => {
-        this.props.setUserProfile(response.data);
-      });
+    this.props.getUserProfile(userId);
+    // userAPI.getProfile(userId).then((response) => {
+    //   this.props.setUserProfile(response.data);
+    // });
+    // axios
+    //   .get("https://jsonplaceholder.typicode.com/users/" + userId)
+    //   .then((response) => {
+    //     this.props.setUserProfile(response.data);
+    //   });
   }
 
   render() {
+    if (!this.props.isAuth) {
+      return <Redirect to={"/login"} />;
+    }
     return <Profile {...this.props} profile={this.props.profile} />;
   }
 }
@@ -28,11 +32,12 @@ class ProfileContainer extends Component {
 const mapStateToProps = (state) => {
   return {
     profile: state.profilePage.profile,
+    isAuth: state.auth.isAuth,
   };
 };
 
 let withUrlDataContainerComponent = withRouter(ProfileContainer);
 
-export default connect(mapStateToProps, { setUserProfile })(
+export default connect(mapStateToProps, { getUserProfile })(
   withUrlDataContainerComponent
 );

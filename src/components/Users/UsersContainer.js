@@ -1,26 +1,24 @@
 import { connect } from "react-redux";
 import React from "react";
-import axios from "axios";
 import userPhoto from "../../assets/images/user.jpg";
-
 import Users from "./Users";
 import {
   follow,
   setCurrentPage,
   setUsers,
   setUsersOnPages,
-  setTotalUsersCount,
-  toggleIsFetching,
   unfollow,
+  toggleFollowingProgress,
+  getUsers,
 } from "../../redux/usersReducer";
 import Preloader from "../common/preloader/Preloader";
 
 class UsersContainer extends React.Component {
-  onGetArrayPages = (response) => {
-    let maxPageLength = Math.ceil(response.data.length / this.props.pageSize);
+  onGetArrayPages = (data) => {
+    let maxPageLength = Math.ceil(data.length / this.props.pageSize);
     let usersObject = [];
     let newObj = [];
-    let maxLength = response.data.length; //10
+    let maxLength = data.length; //10
     let pageSize = this.props.pageSize; //3
 
     for (let i = 1; i <= maxPageLength; i++) {
@@ -62,28 +60,7 @@ class UsersContainer extends React.Component {
   // }
   componentDidMount() {
     if (this.props.users.length === 0) {
-      this.props.toggleIsFetching(true);
-      axios
-        // .get("https://swapi.dev/api/planets")
-        .get("https://jsonplaceholder.typicode.com/users")
-        .then((response) => {
-          this.props.toggleIsFetching(false);
-          // axios.get("https://swapi.dev/api/people").then((response) => {
-
-          this.props.setUsers(response.data);
-          this.props.setTotalUsersCount(response.data.length);
-
-          let arrayPages = this.onGetArrayPages(response);
-          let usersArrow = [...response.data];
-
-          this.props.setUsersOnPages(
-            this.onGetDisturbedArrayPages(arrayPages, usersArrow)
-          );
-
-          this.props.setUsers(
-            this.props.usersOnPages.find((item) => item.id === 1).newUserArrow
-          );
-        });
+      this.props.getUsers(this.props.pageSize);
     }
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -113,6 +90,7 @@ class UsersContainer extends React.Component {
           userPhoto={userPhoto}
           follow={this.props.follow}
           unfollow={this.props.unfollow}
+          followingInProgress={this.props.followingInProgress}
         />
       </>
     );
@@ -127,6 +105,7 @@ const mapStateToProps = (state) => {
     totalUsersCount: state.usersPage.totalUsersCount,
     currentPage: state.usersPage.currentPage,
     isFetching: state.usersPage.isFetching,
+    followingInProgress: state.usersPage.followingInProgress,
   };
 };
 // const mapDispatchToProps = (dispatch) => {
@@ -160,7 +139,7 @@ export default connect(mapStateToProps, {
   unfollow,
   setUsers,
   setCurrentPage,
-  setTotalUsersCount,
   setUsersOnPages,
-  toggleIsFetching,
+  toggleFollowingProgress,
+  getUsers,
 })(UsersContainer);

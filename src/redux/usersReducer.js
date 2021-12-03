@@ -1,3 +1,5 @@
+import { userAPI } from "../api/api";
+
 const FOLLOW = "FOLLOW";
 const UNFOLLOW = "UNFOLLOW";
 const SET_USERS = "SET_USERS";
@@ -5,6 +7,7 @@ const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
 const SET_TOTAL_USERS_COUNT = "SET_TOTAL_USERS_COUNT";
 const SET_USERS_ON_PAGES = "SET_USERS_ON_PAGES";
 const TOGGLE_IS_FETCHING = "TOGGLE_IS_FETCHING";
+const TOGGLE_IS_FOLLOWING_PROGRESS = "TOGGLE_IS_FOLLOWING_PROGRESS";
 
 let initialState = {
   users: [],
@@ -13,35 +16,7 @@ let initialState = {
   currentPage: 1,
   usersOnPages: [],
   isFetching: false,
-  // users: [
-  //   {
-  //     id: 1,
-  //     photoUrl:
-  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQkHfyUXpFU_i8g1PIp_T-hSSyb8PYePWprg&usqp=CAU",
-  //     followed: true,
-  //     fullName: "Tor",
-  //     status: "I`m god",
-  //     location: { city: "Arcana", country: "sky" },
-  //   },
-  //   {
-  //     id: 2,
-  //     photoUrl:
-  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQkHfyUXpFU_i8g1PIp_T-hSSyb8PYePWprg&usqp=CAU",
-  //     followed: true,
-  //     fullName: "Ironman",
-  //     status: "I`m iron",
-  //     location: { city: "New York", country: "USA" },
-  //   },
-  //   {
-  //     id: 3,
-  //     photoUrl:
-  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTn-qGqAcyvbYa_wDNekjmrfHIO7Lpp7rstIA&usqp=CAU",
-  //     followed: false,
-  //     fullName: "Spiderman",
-  //     status: "I`m adroit",
-  //     location: { city: "Philadelphia", country: "USA" },
-  //   },
-  // ],
+  followingInProgress: [],
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -91,19 +66,26 @@ const usersReducer = (state = initialState, action) => {
         ...state,
         isFetching: action.isFetching,
       };
+    case TOGGLE_IS_FOLLOWING_PROGRESS:
+      return {
+        ...state,
+        followingInProgress: action.isFetching
+          ? [...state.followingInProgress, action.userId]
+          : [state.followingInProgress.filter((id) => id !== action.userId)],
+      };
 
     default:
       return state;
   }
 };
 
-export const follow = (userId) => {
+export const followSuccess = (userId) => {
   return {
     type: FOLLOW,
     userId,
   };
 };
-export const unfollow = (userId) => {
+export const unfollowSuccess = (userId) => {
   return {
     type: UNFOLLOW,
     userId,
@@ -137,6 +119,92 @@ export const toggleIsFetching = (isFetching) => {
   return {
     type: TOGGLE_IS_FETCHING,
     isFetching,
+  };
+};
+export const toggleFollowingProgress = (isFetching, userId) => {
+  return {
+    type: TOGGLE_IS_FOLLOWING_PROGRESS,
+    isFetching,
+    userId,
+  };
+};
+
+export const getUsers = (pageSize) => {
+  const onGetArrayPages = (data) => {
+    let maxPageLength = Math.ceil(data.length / pageSize);
+    let usersObject = [];
+    let newObj = [];
+    let maxLength = data.length; //10
+    // let pageSize =  pageSize; //3
+
+    for (let i = 1; i <= maxPageLength; i++) {
+      let count = maxLength > pageSize ? pageSize : maxLength;
+      for (let j = 1; j <= count; j++) {
+        newObj = j;
+        maxLength--;
+      }
+      usersObject.push(newObj);
+    }
+    return usersObject;
+  };
+  const onGetDisturbedArrayPages = (arrayPages, usersArrow) => {
+    let totalArr = [];
+    let j = 0;
+
+    for (let i = 0; i < arrayPages.length; i++) {
+      let newUserArrow = [];
+      for (let k = 0; k < arrayPages[i]; k++) {
+        newUserArrow.push(usersArrow[j]);
+        j++;
+      }
+      totalArr.push({ id: i + 1, newUserArrow });
+    }
+
+    return totalArr;
+  };
+  return (dispatch) => {
+    dispatch(toggleIsFetching(true));
+
+    userAPI.getUsers().then((data) => {
+      dispatch(toggleIsFetching(false));
+
+      dispatch(setUsers(data));
+      dispatch(setTotalUsersCount(data.length));
+
+      let arrayPages = onGetArrayPages(data);
+      let usersArrow = [...data];
+
+      dispatch(
+        setUsersOnPages(onGetDisturbedArrayPages(arrayPages, usersArrow))
+      );
+      // ?????????????????????????????????
+      // dispatch(
+      //   setUsers(usersOnPages.find((item) => item.id === 1).newUserArrow)
+      // );
+    });
+  };
+};
+
+export const follow = (userId) => {
+  return (dispatch) => {
+    dispatch(toggleFollowingProgress(true, userId));
+    userAPI.follow(userId).then((response) => {
+      if (response.status === 201) {
+        dispatch(followSuccess(userId));
+      }
+      dispatch(toggleFollowingProgress(false, userId));
+    });
+  };
+};
+export const unfollow = (userId) => {
+  return (dispatch) => {
+    dispatch(toggleFollowingProgress(true, userId));
+    userAPI.unfollow(userId).then((response) => {
+      if (response.status === 201) {
+        dispatch(unfollowSuccess(userId));
+      }
+      dispatch(toggleFollowingProgress(false, userId));
+    });
   };
 };
 

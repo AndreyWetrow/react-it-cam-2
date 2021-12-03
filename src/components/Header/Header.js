@@ -3,7 +3,6 @@ import classes from "./Header.module.scss";
 import { NavLink } from "react-router-dom";
 
 const Header = (props) => {
-  console.log(props);
   return (
     <header className={classes.header}>
       <img
