@@ -1,16 +1,25 @@
 import React, { Component } from "react";
 import Profile from "./Profile";
 import { connect } from "react-redux";
-import { getUserProfile } from "../../redux/profileReducer";
-import { Redirect, withRouter } from "react-router-dom";
+import {
+  getUserProfile,
+  getUserStatus,
+  updateStatus,
+} from "../../redux/profileReducer";
+import { withRouter } from "react-router-dom";
+import { compose } from "redux";
 
 class ProfileContainer extends Component {
+  // userId = this.props.match.params.userId ? this.props.match.params.userId : 2;
+
   componentDidMount() {
     let userId = this.props.match.params.userId;
     if (!userId) {
       userId = 2;
     }
     this.props.getUserProfile(userId);
+    // this.props.updateStatus(userId, "1212");
+    this.props.getUserStatus(userId);
     // userAPI.getProfile(userId).then((response) => {
     //   this.props.setUserProfile(response.data);
     // });
@@ -22,22 +31,36 @@ class ProfileContainer extends Component {
   }
 
   render() {
-    if (!this.props.isAuth) {
-      return <Redirect to={"/login"} />;
-    }
-    return <Profile {...this.props} profile={this.props.profile} />;
+    return (
+      <Profile
+        {...this.props}
+        profile={this.props.profile}
+        status={this.props.status}
+        updateStatus={this.props.updateStatus}
+        userId={
+          this.props.match.params.userId ? this.props.match.params.userId : 2
+        }
+      />
+    );
   }
 }
-
 const mapStateToProps = (state) => {
   return {
     profile: state.profilePage.profile,
-    isAuth: state.auth.isAuth,
+    status: state.profilePage.status,
   };
 };
 
-let withUrlDataContainerComponent = withRouter(ProfileContainer);
+export default compose(
+  connect(mapStateToProps, { getUserProfile, getUserStatus, updateStatus }),
+  withRouter
+  // withAuthRedirect
+)(ProfileContainer);
 
-export default connect(mapStateToProps, { getUserProfile })(
-  withUrlDataContainerComponent
-);
+// let AuthRedirectComponent = withAuthRedirect(ProfileContainer);
+//
+// let withUrlDataContainerComponent = withRouter(AuthRedirectComponent);
+//
+// export default connect(mapStateToProps, { getUserProfile })(
+//   withUrlDataContainerComponent
+// );

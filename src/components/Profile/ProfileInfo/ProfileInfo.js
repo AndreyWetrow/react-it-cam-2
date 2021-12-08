@@ -1,6 +1,7 @@
 import React from "react";
 import classes from "./ProfileInfo.module.scss";
 import Preloader from "../../common/preloader/Preloader";
+import ProfileStatus from "./ProfileStatus";
 
 const ProfileInfo = (props) => {
   if (!props.profile) {
@@ -18,6 +19,13 @@ const ProfileInfo = (props) => {
       <div>{props.profile.phone}</div>
       <div className={classes.descriptionBlock}> {props.profile.name}</div>
       <div className={classes.descriptionBlock}> {props.profile.username}</div>
+      <div className={classes.descriptionBlock}>
+        <ProfileStatus
+          status={props.status}
+          updateStatus={props.updateStatus}
+          userId={props.userId}
+        />
+      </div>
     </>
   );
 };

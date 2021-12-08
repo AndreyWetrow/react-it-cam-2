@@ -28,7 +28,8 @@ export const userAPI = {
   },
 
   getProfile(userId) {
-    return instance.get("users/" + userId);
+    console.warn("Obsolete method. Please use profileAPI Object");
+    return profileAPI.getProfile(userId);
   },
 
   // signIn() {
@@ -42,6 +43,26 @@ export const userAPI = {
   //     "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAKoDlTwYXzV1-ggaXVU23GE3NBTf7z-5o",
   //     authData
   //   );
+  // },
+};
+export const profileAPI = {
+  getProfile(userId) {
+    return instance.get("users/" + userId);
+  },
+  getStatus(userId) {
+    return instance.get("users/" + userId);
+  },
+  updateStatus(userId, status) {
+    return instance.put("users/" + userId, {
+      // website: status,
+      company: { bs: status },
+    });
+  },
+  // updateStatus(status) {
+  //   return instance.put("users/", {
+  //     // website: status,
+  //     company: { bs: status },
+  //   });
   // },
 };
 
