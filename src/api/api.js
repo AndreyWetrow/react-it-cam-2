@@ -79,6 +79,24 @@ export const authAPI = {
       authData
     );
   },
+  login(email, password, rememberMe = false) {
+    const authData = {
+      email,
+      password,
+      rememberMe,
+      // withCredentials: true,
+    };
+    return axios.post(
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAKoDlTwYXzV1-ggaXVU23GE3NBTf7z-5o",
+      authData
+    );
+  },
+  logout() {
+    console.log(1212);
+    return axios.delete(
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAKoDlTwYXzV1-ggaXVU23GE3NBTf7z-5o"
+    );
+  },
 };
 // export const getUsers = () => {
 //   return instance.get("users").then((response) => response.data);
