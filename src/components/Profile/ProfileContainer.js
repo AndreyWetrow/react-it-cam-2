@@ -31,6 +31,7 @@ class ProfileContainer extends Component {
   }
 
   render() {
+    // console.log("RENDER PROFILE");
     return (
       <Profile
         {...this.props}
@@ -45,9 +46,12 @@ class ProfileContainer extends Component {
   }
 }
 const mapStateToProps = (state) => {
+  // console.log("mapStateToProps PROFILE");
   return {
     profile: state.profilePage.profile,
     status: state.profilePage.status,
+    authorizedUserId: state.auth.userId,
+    isAuth: state.auth.isAuth,
   };
 };
 

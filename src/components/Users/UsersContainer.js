@@ -9,43 +9,52 @@ import {
   setUsersOnPages,
   unfollow,
   toggleFollowingProgress,
-  getUsers,
+  requestUsers,
 } from "../../redux/usersReducer";
 import Preloader from "../common/preloader/Preloader";
+import {
+  getCurrentPage,
+  getFollowingInProgress,
+  getIsFetching,
+  getPageSize,
+  getTotalUsersCount,
+  getUsers,
+  getUsersOnPages,
+} from "../../redux/users-selectors";
 
 class UsersContainer extends React.Component {
-  onGetArrayPages = (data) => {
-    let maxPageLength = Math.ceil(data.length / this.props.pageSize);
-    let usersObject = [];
-    let newObj = [];
-    let maxLength = data.length; //10
-    let pageSize = this.props.pageSize; //3
-
-    for (let i = 1; i <= maxPageLength; i++) {
-      let count = maxLength > pageSize ? pageSize : maxLength;
-      for (let j = 1; j <= count; j++) {
-        newObj = j;
-        maxLength--;
-      }
-      usersObject.push(newObj);
-    }
-    return usersObject;
-  };
-  onGetDisturbedArrayPages = (arrayPages, usersArrow) => {
-    let totalArr = [];
-    let j = 0;
-
-    for (let i = 0; i < arrayPages.length; i++) {
-      let newUserArrow = [];
-      for (let k = 0; k < arrayPages[i]; k++) {
-        newUserArrow.push(usersArrow[j]);
-        j++;
-      }
-      totalArr.push({ id: i + 1, newUserArrow });
-    }
-
-    return totalArr;
-  };
+  // onGetArrayPages = (data) => {
+  //   let maxPageLength = Math.ceil(data.length / this.props.pageSize);
+  //   let usersObject = [];
+  //   let newObj = [];
+  //   let maxLength = data.length; //10
+  //   let pageSize = this.props.pageSize; //3
+  //
+  //   for (let i = 1; i <= maxPageLength; i++) {
+  //     let count = maxLength > pageSize ? pageSize : maxLength;
+  //     for (let j = 1; j <= count; j++) {
+  //       newObj = j;
+  //       maxLength--;
+  //     }
+  //     usersObject.push(newObj);
+  //   }
+  //   return usersObject;
+  // };
+  // onGetDisturbedArrayPages = (arrayPages, usersArrow) => {
+  //   let totalArr = [];
+  //   let j = 0;
+  //
+  //   for (let i = 0; i < arrayPages.length; i++) {
+  //     let newUserArrow = [];
+  //     for (let k = 0; k < arrayPages[i]; k++) {
+  //       newUserArrow.push(usersArrow[j]);
+  //       j++;
+  //     }
+  //     totalArr.push({ id: i + 1, newUserArrow });
+  //   }
+  //
+  //   return totalArr;
+  // };
   // getUsers = () => {
   //   if (this.props.users.length === 0) {
   //     axios
@@ -97,42 +106,28 @@ class UsersContainer extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    users: state.usersPage.users,
-    usersOnPages: state.usersPage.usersOnPages,
-    pageSize: state.usersPage.pageSize,
-    totalUsersCount: state.usersPage.totalUsersCount,
-    currentPage: state.usersPage.currentPage,
-    isFetching: state.usersPage.isFetching,
-    followingInProgress: state.usersPage.followingInProgress,
-  };
-};
-// const mapDispatchToProps = (dispatch) => {
+// const mapStateToProps = (state) => {
 //   return {
-//     follow: (userId) => {
-//       dispatch(followAC(userId));
-//     },
-//     unfollow: (userId) => {
-//       dispatch(unfollowAC(userId));
-//     },
-//     setUsers: (users) => {
-//       dispatch(setUsersAC(users));
-//     },
-//     setCurrentPage: (pageNumber) => {
-//       dispatch(setCurrentPageAC(pageNumber));
-//     },
-//     setTotalUsersCount: (totalCount) => {
-//       dispatch(setUsersTotalCountAC(totalCount));
-//     },
-//     setUsersOnPages: (usersOnPages) => {
-//       dispatch(setUsersOnPagesAC(usersOnPages));
-//     },
-//     toggleIsFetching: (isFetching) => {
-//       dispatch(toggleIsFetchingAC(isFetching));
-//     },
+//     users: state.usersPage.users,
+//     usersOnPages: state.usersPage.usersOnPages,
+//     pageSize: state.usersPage.pageSize,
+//     totalUsersCount: state.usersPage.totalUsersCount,
+//     currentPage: state.usersPage.currentPage,
+//     isFetching: state.usersPage.isFetching,
+//     followingInProgress: state.usersPage.followingInProgress,
 //   };
 // };
+const mapStateToProps = (state) => {
+  return {
+    users: getUsers(state),
+    usersOnPages: getUsersOnPages(state),
+    pageSize: getPageSize(state),
+    totalUsersCount: getTotalUsersCount(state),
+    currentPage: getCurrentPage(state),
+    isFetching: getIsFetching(state),
+    followingInProgress: getFollowingInProgress(state),
+  };
+};
 
 export default connect(mapStateToProps, {
   follow,
@@ -141,5 +136,5 @@ export default connect(mapStateToProps, {
   setCurrentPage,
   setUsersOnPages,
   toggleFollowingProgress,
-  getUsers,
+  getUsers: requestUsers,
 })(UsersContainer);

@@ -92,7 +92,6 @@ export const authAPI = {
     );
   },
   logout() {
-    console.log(1212);
     return axios.delete(
       "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAKoDlTwYXzV1-ggaXVU23GE3NBTf7z-5o"
     );

@@ -129,7 +129,7 @@ export const toggleFollowingProgress = (isFetching, userId) => {
   };
 };
 
-export const getUsers = (pageSize) => {
+export const requestUsers = (pageSize) => {
   const onGetArrayPages = (data) => {
     let maxPageLength = Math.ceil(data.length / pageSize);
     let usersObject = [];
