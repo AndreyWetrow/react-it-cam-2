@@ -42,15 +42,14 @@ export const setAuthUserData = (userId, email, login, isAuth) => {
 //   };
 // };
 
-export const getAuthUserData = () => (dispatch) => {
+export const getAuthUserData = () => async (dispatch) => {
   try {
-    return authAPI.me().then((response) => {
-      let { localId, kind, email } = response.data;
+    let response = await authAPI.me();
+    let { localId, kind, email } = response.data;
 
-      if (response.data.registered) {
-        dispatch(setAuthUserData(localId, email, kind, true));
-      }
-    });
+    if (response.data.registered) {
+      dispatch(setAuthUserData(localId, email, kind, true));
+    }
   } catch (e) {
     console.log(e);
   }
