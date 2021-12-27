@@ -1,9 +1,10 @@
-import React from "react";
+import React, { Suspense } from "react";
 import classes from "./Dialogs.module.scss";
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
 import { Redirect } from "react-router-dom";
 import AddMessageForm from "./AddMessageForm/AddMessageForm";
+import Preloader from "../common/preloader/Preloader";
 
 const Dialogs = (props) => {
   let state = props.dialogsPage;

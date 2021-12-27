@@ -13,7 +13,7 @@ const TOGGLE_IS_FOLLOWING_PROGRESS = "TOGGLE_IS_FOLLOWING_PROGRESS";
 
 let initialState = {
   users: [],
-  pageSize: 4,
+  pageSize: 1,
   totalUsersCount: 0,
   currentPage: 1,
   usersOnPages: [],
@@ -65,6 +65,7 @@ const usersReducer = (state = initialState, action) => {
         ...state,
         totalUsersCount: action.totalCount,
       };
+
     case SET_USERS_ON_PAGES:
       return {
         ...state,
@@ -178,16 +179,18 @@ export const requestUsers = (pageSize) => {
     dispatch(toggleIsFetching(false));
 
     dispatch(setUsers(data));
+
     dispatch(setTotalUsersCount(data.length));
 
     let arrayPages = onGetArrayPages(data);
     let usersArrow = [...data];
+    let disturbArray = onGetDisturbedArrayPages(arrayPages, usersArrow);
 
-    dispatch(setUsersOnPages(onGetDisturbedArrayPages(arrayPages, usersArrow)));
+    dispatch(setUsersOnPages(disturbArray));
+
     // ?????????????????????????????????
-    // dispatch(
-    //   setUsers(usersOnPages.find((item) => item.id === 1).newUserArrow)
-    // );
+    //  dispatch(setUsers(usersOnPages.find((item) => item.id === 1).newUserArrow));
+    dispatch(setUsers(disturbArray.find((item) => item.id === 1).newUserArrow));
   };
 };
 
