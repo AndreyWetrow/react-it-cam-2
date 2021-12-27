@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/react-it-cam-2/static/css/main.e0233724.chunk.css",
-    "main.js": "/react-it-cam-2/static/js/main.4dd7eb77.chunk.js",
-    "main.js.map": "/react-it-cam-2/static/js/main.4dd7eb77.chunk.js.map",
+    "main.js": "/react-it-cam-2/static/js/main.3edc3e19.chunk.js",
+    "main.js.map": "/react-it-cam-2/static/js/main.3edc3e19.chunk.js.map",
     "runtime-main.js": "/react-it-cam-2/static/js/runtime-main.85aab011.js",
     "runtime-main.js.map": "/react-it-cam-2/static/js/runtime-main.85aab011.js.map",
     "static/js/2.cfdb82df.chunk.js": "/react-it-cam-2/static/js/2.cfdb82df.chunk.js",
@@ -26,6 +26,6 @@
     "static/js/runtime-main.85aab011.js",
     "static/js/2.cfdb82df.chunk.js",
     "static/css/main.e0233724.chunk.css",
-    "static/js/main.4dd7eb77.chunk.js"
+    "static/js/main.3edc3e19.chunk.js"
   ]
 }
